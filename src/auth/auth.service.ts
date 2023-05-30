@@ -4,19 +4,23 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { verify } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../users/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
   async validateUser(username: string, password: string) {
-    const user = await this.usersService.findOneByUsernameWithCredentials(
-      username,
-    );
-    const isPasswordMatch = verify(user.hashedPassword, password);
+    const user = await this.usersRepository.findOneBy({
+      username: username,
+    });
+    const isPasswordMatch = await verify(user.hashedPassword, password);
 
     if (user && isPasswordMatch) {
       const { hashedPassword, ...result } = user;
