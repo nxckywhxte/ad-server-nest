@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { verify } from 'argon2';
@@ -13,13 +17,18 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>
   ) {}
 
   async validateUser(username: string, password: string) {
     const user = await this.usersRepository.findOneBy({
       username: username,
     });
+    if (!user) {
+      return new NotFoundException(
+        'Пользователь с такими данными не найден! Проверьте данные и повторите попытку.'
+      );
+    }
     const isPasswordMatch = await verify(user.hashedPassword, password);
 
     if (user && isPasswordMatch) {
@@ -31,16 +40,16 @@ export class AuthService {
 
   async login(loginUserDto: LoginUserDto) {
     const existUser = await this.usersService.findOneByUsernameWithCredentials(
-      loginUserDto.username,
+      loginUserDto.username
     );
 
     const confirmPasswords = await verify(
       existUser.hashedPassword,
-      loginUserDto.rawPassword,
+      loginUserDto.rawPassword
     );
     if (!confirmPasswords) {
       throw new UnauthorizedException(
-        'Доступ к сервису запрещен! Проверьте данные и попробуйте еще раз.',
+        'Доступ к сервису запрещен! Проверьте данные и попробуйте еще раз.'
       );
     }
     const payload = {
@@ -58,5 +67,10 @@ export class AuthService {
 
   async register(registerUserDto: RegisterUserDto) {
     return await this.usersService.create(registerUserDto);
+  }
+
+  async getMe(user) {
+    console.log(user);
+    return user;
   }
 }

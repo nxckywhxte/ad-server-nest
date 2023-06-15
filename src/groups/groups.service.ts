@@ -12,7 +12,7 @@ import { Group } from './entities/group.entity';
 export class GroupsService {
   constructor(
     @InjectRepository(Group)
-    private readonly groupRepository: Repository<Group>,
+    private readonly groupRepository: Repository<Group>
   ) {}
 
   async create(createGroupDto: CreateGroupDto) {
@@ -23,7 +23,7 @@ export class GroupsService {
     });
     if (existGroup !== null) {
       throw new ConflictException(
-        'Группа с такими данными уже существует! Проверьте данные и попробуйте еще раз.',
+        'Группа с такими данными уже существует! Проверьте данные и попробуйте еще раз.'
       );
     }
     const newGroup = await this.groupRepository.create({
@@ -45,7 +45,7 @@ export class GroupsService {
     });
     if (existGroup === null) {
       throw new NotFoundException(
-        'Группа с такими данными не найдена! Проверьте данные и повторите еще раз.',
+        'Группа с такими данными не найдена! Проверьте данные и повторите еще раз.'
       );
     }
     return existGroup;
@@ -59,7 +59,7 @@ export class GroupsService {
     });
     if (existGroup === null) {
       throw new NotFoundException(
-        'Группа с такими данными не найдена! Проверьте данные и повторите еще раз.',
+        'Группа с такими данными не найдена! Проверьте данные и повторите еще раз.'
       );
     }
     return existGroup;

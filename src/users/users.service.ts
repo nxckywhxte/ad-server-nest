@@ -16,15 +16,12 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly rolesService: RolesService,
-    private readonly groupsService: GroupsService,
+    private readonly groupsService: GroupsService
   ) {}
 
   async create(createUserDto: CreateUserDto) {
     const existRole = await this.rolesService.findOneByRoleName(
-      createUserDto.roleName,
-    );
-    const existGroup = await this.groupsService.findOneByName(
-      createUserDto.groupName,
+      createUserDto.roleName
     );
     const existUser = await this.userRepository.findOne({
       where: {
@@ -34,7 +31,7 @@ export class UsersService {
     });
     if (existUser !== null) {
       throw new ConflictException(
-        'Пользователь с такими данными уже существует! Проверьте данные и попробуйте еще раз.',
+        'Пользователь с такими данными уже существует! Проверьте данные и попробуйте еще раз.'
       );
     }
     const newUser = await this.userRepository.create({
@@ -45,12 +42,6 @@ export class UsersService {
         id: existRole.id,
         name: existRole.name,
       },
-      groups: [
-        {
-          id: existGroup.id,
-          name: existGroup.name,
-        },
-      ],
     });
     await this.userRepository.save(newUser);
     return this.returnUserWithoutPassword(newUser);
@@ -73,7 +64,7 @@ export class UsersService {
     });
     if (existUser === null) {
       throw new NotFoundException(
-        'Пользователя с такими данными не существует! Проверьте данные и попробуйте еще раз',
+        'Пользователя с такими данными не существует! Проверьте данные и попробуйте еще раз'
       );
     }
     return this.returnUserWithoutPassword(existUser);
@@ -87,7 +78,7 @@ export class UsersService {
     });
     if (existUser === null) {
       throw new NotFoundException(
-        'Пользователя с такими данными не существует! Проверьте данные и попробуйте еще раз',
+        'Пользователя с такими данными не существует! Проверьте данные и попробуйте еще раз'
       );
     }
     return existUser;
@@ -102,7 +93,7 @@ export class UsersService {
 
     if (existUser === null) {
       throw new NotFoundException(
-        'Пользователя с такими данными не существует! Проверьте данные и попробуйте еще раз',
+        'Пользователя с такими данными не существует! Проверьте данные и попробуйте еще раз'
       );
     }
     return this.returnUserWithoutPassword(existUser);

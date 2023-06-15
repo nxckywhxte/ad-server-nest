@@ -16,7 +16,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     const user = await this.authService.validateUser(username, password);
     if (!user) {
       return new UnauthorizedException(
-        'Доступ к сервису запрещен! Проверьте данные и попробуйте еще раз.',
+        'Доступ к сервису запрещен! Проверьте данные и попробуйте еще раз.'
       );
     }
     return user;

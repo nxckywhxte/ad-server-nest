@@ -11,7 +11,7 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class RolesService {
   constructor(
-    @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
+    @InjectRepository(Role) private readonly roleRepository: Repository<Role>
   ) {}
 
   async create(createRoleDto: CreateRoleDto) {
@@ -22,7 +22,7 @@ export class RolesService {
     });
     if (existRole !== null) {
       throw new ConflictException(
-        'Роль с такими данными уже существует! Проверьте данные и попробуйте еще раз.',
+        'Роль с такими данными уже существует! Проверьте данные и попробуйте еще раз.'
       );
     }
     const newRole = await this.roleRepository.create({
@@ -44,7 +44,7 @@ export class RolesService {
     });
     if (existRole === null) {
       throw new NotFoundException(
-        'Роль с такими данными не найдена! Проверьте данные и повторите еще раз.',
+        'Роль с такими данными не найдена! Проверьте данные и повторите еще раз.'
       );
     }
     return existRole;
@@ -64,7 +64,7 @@ export class RolesService {
     });
     if (existRole === null) {
       throw new NotFoundException(
-        'Роль с такими данными не найдена! Проверьте данные и повторите еще раз.',
+        'Роль с такими данными не найдена! Проверьте данные и повторите еще раз.'
       );
     }
     return existRole;

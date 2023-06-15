@@ -1,8 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Roles } from '../auth/decorators/role.decorator';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Пользователи')
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -12,7 +14,6 @@ export class UsersController {
     return await this.usersService.create(createUserDto);
   }
 
-  @Roles('Администратор')
   @Get()
   async findAll() {
     return await this.usersService.findAll();

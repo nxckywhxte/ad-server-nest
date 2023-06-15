@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 export class ProfilesService {
   constructor(
     @InjectRepository(Profile)
-    private readonly profileRepository: Repository<Profile>,
+    private readonly profileRepository: Repository<Profile>
   ) {}
 
   async create(createProfileDto: CreateProfileDto) {
@@ -25,7 +25,7 @@ export class ProfilesService {
     });
     if (existProfile === null) {
       throw new NotFoundException(
-        'Профиль с такими данными не найден! Проверьте данные и попробуйте еще раз.',
+        'Профиль с такими данными не найден! Проверьте данные и попробуйте еще раз.'
       );
     }
     return existProfile;

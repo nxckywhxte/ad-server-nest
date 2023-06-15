@@ -2,7 +2,10 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { Public } from '../auth/decorators/public.decorator';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Учебные группы пользователей')
+@ApiBearerAuth()
 @Controller('groups')
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}

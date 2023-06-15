@@ -15,5 +15,4 @@ export class CreateUserDto {
   })
   rawPassword: string;
   roleName: string;
-  groupName: string;
 }
